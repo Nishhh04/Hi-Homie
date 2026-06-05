@@ -18,7 +18,7 @@ const MyListings = () => {
       setLoading(true);
       setError(null);
       const res = await axios.get(
-        "http://localhost:5000/api/properties/my-listings",
+        "https://hi-homie.onrender.comnder.com/api/properties/my-listings",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -34,7 +34,7 @@ const MyListings = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this property?")) return;
 
-    await axios.delete(`http://localhost:5000/api/properties/${id}`, {
+    await axios.delete(`https://hi-homie.onrender.comnder.comnder.comnder.comnder.com/api/properties/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

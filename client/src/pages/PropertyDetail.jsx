@@ -21,7 +21,7 @@ const PropertyDetail = () => {
     const fetchProperty = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/properties/${id}`,
+          `https://hi-homie.onrender.com/api/properties/${id}`,
           { headers: token ? { Authorization: `Bearer ${token}` } : {} }
         );
         setProperty(res.data);
@@ -39,7 +39,7 @@ const PropertyDetail = () => {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this property?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/properties/${property._id}`, {
+      await axios.delete(`https://hi-homie.onrender.com/api/properties/${property._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/properties");
@@ -51,7 +51,7 @@ const PropertyDetail = () => {
   const toggleUnderDeal = async () => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/properties/${property._id}/under-deal`,
+        `https://hi-homie.onrender.com/api/properties/${property._id}/under-deal`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -81,7 +81,7 @@ const PropertyDetail = () => {
     setSaving(true);
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/properties/${property._id}`,
+        `https://hi-homie.onrender.com/api/properties/${property._id}`,
         editForm,
         { headers: { Authorization: `Bearer ${token}` } }
       );

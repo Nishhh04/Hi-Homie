@@ -25,7 +25,7 @@ const EditProperty = () => {
     const fetchProperty = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/properties/${id}`,
+          `https://hi-homie.onrender.com/api/properties/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -60,7 +60,7 @@ const EditProperty = () => {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/properties/${id}`,
+        `https://hi-homie.onrender.com/api/properties/${id}`,
         form,
         {
           headers: { Authorization: `Bearer ${token}` },

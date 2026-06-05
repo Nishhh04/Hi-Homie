@@ -12,7 +12,7 @@ const UnderDeal = () => {
   useEffect(() => {
     const fetchUnderDeal = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/properties", {
+        const res = await axios.get("https://hi-homie.onrender.com/api/properties", {
           params: { underDeal: "true" },
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -32,7 +32,7 @@ const UnderDeal = () => {
   const handleToggle = async (property) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/properties/${property._id}/under-deal`,
+        `https://hi-homie.onrender.com/api/properties/${property._id}/under-deal`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

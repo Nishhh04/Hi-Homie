@@ -30,7 +30,7 @@ const Properties = () => {
       try {
         const selectedRange = PRICE_RANGES[filters.priceRange] || {};
 
-        const res = await axios.get("http://localhost:5000/api/properties", {
+        const res = await axios.get("https://hi-homie.onrender.com/api/properties", {
           params: {
             city: filters.city || undefined,
             type: filters.type || undefined,

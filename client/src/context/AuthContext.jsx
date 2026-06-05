@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:5000/api/properties/wishlist", {
+        .get("https://hi-homie.onrender.com/api/properties/wishlist", {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((res) => setWishlist(res.data.map((p) => p._id)))
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const toggleWishlist = async (propertyId) => {
   try {
     await axios.post(
-      `http://localhost:5000/api/properties/wishlist/${propertyId}`,
+      `https://hi-homie.onrender.com/api/properties/wishlist/${propertyId}`,
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     );

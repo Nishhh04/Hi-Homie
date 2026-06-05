@@ -17,7 +17,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/properties");
+        const res = await axios.get("https://hi-homie.onrender.com/api/properties");
         setProperties(res.data);
       } catch (err) {
         console.error(err);

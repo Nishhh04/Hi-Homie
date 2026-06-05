@@ -15,7 +15,7 @@ const Wishlist = () => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:5000/api/properties/wishlist", {
+        const res = await axios.get("https://hi-homie.onrender.com/api/properties/wishlist", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setWishlistProperties(res.data);

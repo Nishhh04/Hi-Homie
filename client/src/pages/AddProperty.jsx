@@ -47,7 +47,7 @@ const AddProperty = () => {
     // Append images
     form.images.forEach((img) => formData.append("images", img));
 
-    await axios.post("http://localhost:5000/api/properties", formData, {
+    await axios.post("https://hi-homie.onrender.com/api/properties", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
