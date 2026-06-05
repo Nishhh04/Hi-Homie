@@ -1,16 +1,37 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import PropertyCard from "../components/PropertyCard";
+import axios from "axios";
 
 const Wishlist = () => {
-  const { wishlist=[], properties=[] } = useContext(AuthContext);
+  const { wishlist, token } = useContext(AuthContext);
+  const [wishlistProperties, setWishlistProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Filter only properties that are in wishlist
-  const wishlistProperties = properties.filter((p) =>  wishlist.some(w => w._id === p._id));
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const res = await axios.get("http://localhost:5000/api/properties/wishlist", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setWishlistProperties(res.data);
+      } catch (err) {
+        console.error("Failed to fetch wishlist:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!properties || !wishlist) {
-    return <p className="text-center mt-10">Loading...</p>;
-  }
+    fetchWishlist();
+  }, [token, wishlist]); // re-fetch when wishlist changes
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+
+  if (!token) return <p className="text-center mt-10">Please login to view your wishlist.</p>;
 
   if (!wishlistProperties.length) {
     return (

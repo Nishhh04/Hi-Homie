@@ -4,21 +4,28 @@ import axios from "axios"; // ✅ MISSING IMPORT
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
+  );
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [wishlist, setWishlist] = useState([]);
 
   // store token
   useEffect(() => {
-    if (token) localStorage.setItem("token", token);
-    else localStorage.removeItem("token");
+    if (token && user){
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+    }else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user"); 
+    }
   }, [token]);
 
   // load wishlist on login
   useEffect(() => {
     if (token) {
       axios
-        .get("/api/properties/wishlist", {
+        .get("http://localhost:5000/api/properties/wishlist", {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then((res) => setWishlist(res.data.map((p) => p._id)))
@@ -52,6 +59,7 @@ export const AuthProvider = ({ children }) => {
     setToken(token);
     setWishlist(userData?.wishlist || []);
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData)); 
   };
 
   const logout = () => {
@@ -59,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setWishlist([]);
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (

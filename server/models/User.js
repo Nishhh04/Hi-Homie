@@ -18,8 +18,10 @@ const userSchema = new mongoose.Schema(
     wishlist: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Property"
-    }]
+    }],
 
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );

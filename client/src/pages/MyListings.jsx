@@ -68,7 +68,7 @@ const MyListings = () => {
 
               <div className="flex justify-between mt-4">
                 <Link
-                  to={`/edit-property/${p._id}`}
+                  to={`/property/${p._id}`}
                   className="text-blue-600"
                 >
                   Edit

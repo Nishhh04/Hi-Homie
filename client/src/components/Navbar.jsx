@@ -179,7 +179,8 @@ const Navbar = () => {
               >
                 Under Deal
               </Link>
-
+              
+            {/* 
               <div
                 onClick={() => {
                   toggleMode();
@@ -200,7 +201,8 @@ const Navbar = () => {
                     }`}
                   />
                 </div>
-              </div>
+              </div> 
+            */}
 
               <hr className="border-gray-300 my-1" />
 

@@ -11,6 +11,8 @@ import MyListings from "./pages/MyListings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Wishlist from "./pages/Wishlist";
 import UnderDeal from "./pages/UnderDeal";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -25,7 +27,6 @@ function App() {
         <Route path="/add-property" element={<AddProperty />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
-        <Route path="/property/edit/:id" element={<EditProperty />} />
         <Route path="/my-listings" 
           element={
           <ProtectedRoute>
@@ -54,6 +55,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         
       </Routes>
     </BrowserRouter>

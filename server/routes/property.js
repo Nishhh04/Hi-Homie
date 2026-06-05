@@ -7,6 +7,8 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import optionalAuthMiddleware from "../middleware/optionalAuthMiddleware.js"
 import { validatePropertyData } from "../utils/validators.js";
 import User from "../models/User.js"; // adjust path if needed
+import dotenv from "dotenv";
+dotenv.config();
 
 
 // Configure multer
@@ -66,11 +68,13 @@ router.post("/", authMiddleware, upload.array("images", 5), async (req, res) => 
     // }
 
     let imageUrls = [];
-
     if (req.files && req.files.length > 0) {
-      imageUrls = req.files.map(
-      () => "https://via.placeholder.com/600"
-      );
+      for (const file of req.files) {
+        const result = await cloudinary.v2.uploader.upload(file.path, {
+          folder: "properties",
+        });
+        imageUrls.push(result.secure_url);
+      }
     }
 
 
@@ -250,20 +254,34 @@ router.get("/my-listings", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/wishlist", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate("wishlist");
+
+    res.json(user.wishlist);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 // Get Owner's Info with  Property Detail 
-router.get("/:id",optionalAuthMiddleware, async (req, res) => {
+router.get("/:id", optionalAuthMiddleware, async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
 
     if (!property)
       return res.status(404).json({ message: "Property not found" });
 
-    // 🔐 Hide contact details if not logged in
-    if (property.underDeal || !req.user) {
+    // ✅ Only hide contact if NOT logged in
+    if (!req.user) {
       property.contact = {
         name: property.contact?.name
       };
     }
+    // ✅ Logged in users get full contact details always
 
     res.json(property);
   } catch (err) {
@@ -295,18 +313,6 @@ router.post("/wishlist/:propertyId", authMiddleware, async (req, res) => {
   }
 });
 
-
-router.get("/wishlist", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id)
-      .populate("wishlist");
-
-    res.json(user.wishlist);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 // TOGGLE UNDER DEAL (Owner only)
 router.patch("/:id/under-deal", authMiddleware, async (req, res) => {

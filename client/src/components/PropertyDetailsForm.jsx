@@ -1,6 +1,8 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+const MAX_IMAGES = 5; 
+
 const PropertyDetailsForm = ({ form, setForm, onNext }) => {
   const { token } = useContext(AuthContext);
   const [imageError, setImageError] = useState("");
@@ -159,7 +161,7 @@ const PropertyDetailsForm = ({ form, setForm, onNext }) => {
           onChange={handleChange}
           className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033]"
         >
-          <option value="sell">Sell</option>
+          <option value="buy">Sell</option>
           <option value="rent">Rent</option>
         </select>
       </div>

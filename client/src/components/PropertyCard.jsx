@@ -70,7 +70,7 @@ const PropertyCard = ({ property }) => {
         <strong>Bedrooms:</strong> {property.bedrooms || 0} |{" "}
         <strong>Bathrooms:</strong> {property.bathrooms || 0}
       </p>
-      <p><strong>Owner:</strong> {property.owner?.name || "N/A"}</p>
+      <p><strong>Owner:</strong> {property.contact?.name || "N/A"}</p>
 
       {/* Wishlist button */}
       {!isOwner && !property.underDeal && (
@@ -78,8 +78,8 @@ const PropertyCard = ({ property }) => {
         onClick={handleWishlist}
         style={{
           position: "absolute",
-          top: "10px", 
-          right: "10px",
+          top: "15px", 
+          right: "15px",
           fontSize: "24px",
           background: "none",
           border: "none",
