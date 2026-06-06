@@ -250,7 +250,13 @@ const PropertyDetail = () => {
           user ? (
             <>
               <a href={`tel:${property.contact?.phone}`} className="px-6 py-2 rounded-lg text-white font-medium hover:opacity-90" style={{ backgroundColor: "#583a18" }}>Call Now</a>
-              <a href={`mailto:${property.contact?.email}?subject=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`} className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50">Enquire</a>
+              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${property.contact?.email}&su=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50"
+              >
+                Enquire
+              </a>
             </>
           ) : (
             <button onClick={() => navigate("/login")} className="px-6 py-2 rounded-lg text-white font-medium" style={{ backgroundColor: "#844212" }}>Login to Contact Owner</button>

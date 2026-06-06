@@ -9,7 +9,7 @@ import CTAImage from "../image/real-estate.png";
 
 
 const Dashboard = () => {
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [properties, setProperties] = useState([]);
   const [filter, setFilter] = useState({ type: "all", city: "" });
   const navigate = useNavigate();
@@ -61,19 +61,26 @@ const Dashboard = () => {
           </h2>
 
           <p className="text-gray-600 mb-6 leading-relaxed">
-            Login to create property listings, send inquiries, and manage your
+            Join us to create property listings, send inquiries, and manage your
             real estate portfolio. Start your journey with us today.
           </p>
 
-          <Link to="/login">
-            <button className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition">
-              <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center">
-                <Plus className="w-3.5 h-3.5 text-green-600 items-bold" />
-              </span>
-
-              Login to Get Started
-            </button>
-          </Link>
+          {/* ✅ Show welcome message if logged in, else show button */}
+          {user ? (
+            <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-6 py-3 rounded-lg font-medium">
+              <HeartHandshake className="text-green-600" size={20} />
+              Welcome back, {user.name} 👋
+            </div>
+          ) : (
+            <Link to="/login">
+              <button className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center">
+                  <Plus className="w-3.5 h-3.5 text-green-600 items-bold" />
+                </span>
+                Login to Get Started
+              </button>
+            </Link>
+          )}
         </div>
 
         {/* Right Image */}
