@@ -210,38 +210,46 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
+
 /* GET ALL PROPERTIES (Optional filters: city, state, type, price range) */
 router.get("/", async (req, res) => {
   try {
-    const { city, state, type, minPrice, maxPrice, underDeal } = req.query;
-   
+    const { location, type, minPrice, maxPrice, underDeal } = req.query;
+
     let query = {};
 
-    if (city) query["location.city"] = city;
-    if (state) query["location.state"] = state;
+    // Case-insensitive search across city, state, and country
+    if (location) {
+      const regex = new RegExp(location, "i");
+      query.$or = [
+        { "location.city": regex },
+        { "location.state": regex },
+        { "location.country": regex },
+      ];
+    }
+
     if (type) query.type = type;
     if (minPrice || maxPrice) query.price = {};
     if (minPrice) query.price.$gte = Number(minPrice);
     if (maxPrice) query.price.$lte = Number(maxPrice);
-    
-    if (underDeal !== undefined) {
+
+    if (underDeal !== undefined && underDeal !== "") {
       query.underDeal = underDeal === "true";
     }
-    
 
     const properties = await Property.find(query);
     const safeProperties = properties.map((property) => ({
       ...property.toObject(),
-      contact: {
-        name: property.contact?.name
-      }
+      contact: { name: property.contact?.name },
     }));
+
     res.json(safeProperties);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // GET properties added by logged-in agent
 router.get("/my-listings", authMiddleware, async (req, res) => {

@@ -17,7 +17,7 @@ const Properties = () => {
   const { token } = useContext(AuthContext);
   const [properties, setProperties] = useState([]);
   const [filters, setFilters] = useState({
-    city: "",
+    location: "",
     type: "",
     priceRange: "",
   });
@@ -32,7 +32,7 @@ const Properties = () => {
 
         const res = await axios.get("https://hi-homie.onrender.com/api/properties", {
           params: {
-            city: filters.city || undefined,
+            location: filters.location || undefined,
             type: filters.type || undefined,
             minPrice: selectedRange.min || undefined,
             maxPrice: selectedRange.max || undefined,
@@ -72,7 +72,7 @@ const Properties = () => {
           type="text"
           placeholder="Enter city (e.g. Delhi, Jaipur)"
           value={filters.city}
-          onChange={(e) => setFilters({ ...filters, city: e.target.value })}
+          onChange={(e) => setFilters({ ...filters, location: e.target.value })}
           className="border p-2 rounded"
         />
 
