@@ -10,9 +10,11 @@ const MyListings = () => {
   const [error, setError] = useState(null);     // <-- error state
 
   useEffect(() => {
-    fetchMyListings();
-  }, []);
-
+    if (token) {
+      fetchMyListings();
+    }
+  }, [token]);
+  
   const fetchMyListings = async () => {
     try {
       setLoading(true);
@@ -62,7 +64,7 @@ const MyListings = () => {
               />
               <h3 className="font-bold mt-2">{p.title}</h3>
               <p className="text-sm text-gray-600">
-                {p.location.city}, {p.location.state}
+                {p.location?.city || "N/A"}, {p.location?.state || "N/A"}
               </p>
               <p className="font-semibold">₹{p.price}</p>
 

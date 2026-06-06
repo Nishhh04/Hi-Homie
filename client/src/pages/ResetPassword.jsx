@@ -20,7 +20,7 @@ const ResetPassword = () => {
     setError("");
     try {
       const res = await axios.post(
-        `https://hi-homie.onrender.comnder.com/api/auth/reset-password/${token}`,
+        `https://hi-homie.onrender.com/api/auth/reset-password/${token}`,
         { password }
       );
       setMessage(res.data.message);

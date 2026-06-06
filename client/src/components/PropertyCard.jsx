@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext"; // ✅ import context
 const PropertyCard = ({ property }) => {
   const navigate = useNavigate();
   const { user, wishlist, toggleWishlist } = useContext(AuthContext); // ✅ use context
-  const isOwner = user && property.ownerId === user._id;
+  const isOwner = user && (property.ownerId === user.id || property.ownerId === user._id);
 
   // Navigate to property detail page
   const handleEnquire = () => {

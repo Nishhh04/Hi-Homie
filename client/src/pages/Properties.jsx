@@ -71,7 +71,7 @@ const Properties = () => {
         <input
           type="text"
           placeholder="Enter city (e.g. Delhi, Jaipur)"
-          value={filters.city}
+          value={filters.location}
           onChange={(e) => setFilters({ ...filters, location: e.target.value })}
           className="border p-2 rounded"
         />

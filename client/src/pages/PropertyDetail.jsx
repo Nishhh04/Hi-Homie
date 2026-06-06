@@ -68,7 +68,7 @@ const PropertyDetail = () => {
       description: property.description || "",
       price: property.price || "",
       city: property.location?.city || "",
-      type: property.type || "sell",
+      type: property.type || "buy",
       bedrooms: property.bedrooms || 1,
       bathrooms: property.bathrooms || 1,
     });

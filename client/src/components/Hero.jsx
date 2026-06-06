@@ -29,7 +29,7 @@ const Hero = () => {
           </p>
 
           <Link
-            to="/Properties"
+            to="/properties"
             className="inline-block mt-8 bg-amber-400 text-[#4a2f1b] px-8 py-4 rounded-lg font-semibold hover:bg-amber-300 transition"
           >
             View Properties

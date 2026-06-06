@@ -228,7 +228,13 @@ router.get("/", async (req, res) => {
       ];
     }
 
-    if (type) query.type = type;
+    if (type) {
+      if (type === "buy" || type === "sell") {
+        query.type = { $in: ["buy", "sell"] };
+      } else {
+        query.type = type;
+      }
+    }
     if (minPrice || maxPrice) query.price = {};
     if (minPrice) query.price.$gte = Number(minPrice);
     if (maxPrice) query.price.$lte = Number(maxPrice);
