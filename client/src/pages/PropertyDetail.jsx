@@ -18,7 +18,6 @@ const PropertyDetail = () => {
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [showEnquireMenu, setShowEnquireMenu] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -146,16 +145,17 @@ const PropertyDetail = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition"
-      >
-        <ArrowLeft size={20} />
-        <span>Back</span>
-      </button>
-
-      <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
+      {/* Title & Back Button Row */}
+      <div className="flex items-center gap-4 mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition shrink-0 cursor-pointer"
+          aria-label="Go Back"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <h1 className="text-3xl font-bold text-gray-900">{property.title}</h1>
+      </div>
 
       {/* Image Slider */}
       <div className="relative mb-6 w-full max-h-[600px] rounded-lg overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
@@ -250,35 +250,7 @@ const PropertyDetail = () => {
           user ? (
             <>
               <a href={`tel:${property.contact?.phone}`} className="px-6 py-2 rounded-lg text-white font-medium hover:opacity-90" style={{ backgroundColor: "#583a18" }}>Call Now</a>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setShowEnquireMenu(!showEnquireMenu)}
-                  className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 cursor-pointer"
-                >
-                  Enquire
-                </button>
-                {showEnquireMenu && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1 font-sans">
-                    <a
-                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${property.contact?.email}&su=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setShowEnquireMenu(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left font-medium transition-colors"
-                    >
-                      Email via Gmail (Web)
-                    </a>
-                    <a
-                      href={`mailto:${property.contact?.email}?subject=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`}
-                      onClick={() => setShowEnquireMenu(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left font-medium transition-colors"
-                    >
-                      Default Mail App
-                    </a>
-                  </div>
-                )}
-              </div>
+              <a href={`mailto:${property.contact?.email}?subject=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`} className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50">Enquire</a>
             </>
           ) : (
             <button onClick={() => navigate("/login")} className="px-6 py-2 rounded-lg text-white font-medium" style={{ backgroundColor: "#844212" }}>Login to Contact Owner</button>
