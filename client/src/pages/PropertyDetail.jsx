@@ -157,7 +157,7 @@ const PropertyDetail = () => {
       <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
 
       {/* Image Slider */}
-      <div className="relative mb-6 w-full h-[500px] bg-neutral-950 rounded-lg overflow-hidden flex items-center justify-center">
+      <div className="relative mb-6 w-full h-[500px] bg-transparent rounded-lg overflow-hidden flex items-center justify-center">
         <img
           src={property.images?.length > 0 ? property.images[activeImg] : FALLBACK_IMAGE}
           alt="property"
