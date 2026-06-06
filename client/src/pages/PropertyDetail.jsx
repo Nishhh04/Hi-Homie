@@ -18,6 +18,7 @@ const PropertyDetail = () => {
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [showEnquireMenu, setShowEnquireMenu] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -157,11 +158,11 @@ const PropertyDetail = () => {
       <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
 
       {/* Image Slider */}
-      <div className="relative mb-6 w-full h-[500px] bg-transparent rounded-lg overflow-hidden flex items-center justify-center">
+      <div className="relative mb-6 w-full max-h-[600px] rounded-lg overflow-hidden flex items-center justify-center bg-gray-50 border border-gray-100">
         <img
           src={property.images?.length > 0 ? property.images[activeImg] : FALLBACK_IMAGE}
           alt="property"
-          className="max-w-full max-h-full object-contain"
+          className="w-full h-auto max-h-[600px] object-contain rounded-lg"
         />
 
         {/* Navigation Arrows */}
@@ -249,7 +250,35 @@ const PropertyDetail = () => {
           user ? (
             <>
               <a href={`tel:${property.contact?.phone}`} className="px-6 py-2 rounded-lg text-white font-medium hover:opacity-90" style={{ backgroundColor: "#583a18" }}>Call Now</a>
-              <a href={`mailto:${property.contact?.email}`} className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50">Enquire</a>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowEnquireMenu(!showEnquireMenu)}
+                  className="px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 cursor-pointer"
+                >
+                  Enquire
+                </button>
+                {showEnquireMenu && (
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-1 font-sans">
+                    <a
+                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${property.contact?.email}&su=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowEnquireMenu(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left font-medium transition-colors"
+                    >
+                      Email via Gmail (Web)
+                    </a>
+                    <a
+                      href={`mailto:${property.contact?.email}?subject=Inquiry about ${property.title}&body=Hi, I am interested in your property ${property.title}.`}
+                      onClick={() => setShowEnquireMenu(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left font-medium transition-colors"
+                    >
+                      Default Mail App
+                    </a>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <button onClick={() => navigate("/login")} className="px-6 py-2 rounded-lg text-white font-medium" style={{ backgroundColor: "#844212" }}>Login to Contact Owner</button>
