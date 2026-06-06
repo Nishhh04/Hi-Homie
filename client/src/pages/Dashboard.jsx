@@ -114,7 +114,7 @@ const Dashboard = () => {
                 </div>
                 <div className="mt-6 flex justify-center">
                   <Link
-                    to="/properties"
+                    to="/properties?type=buy"
                     className="inline-flex items-center justify-center px-4 py-2 rounded-full border-2 border-[#5a3e2b] text-[#5a3e2b] bg-white/90 shadow-sm hover:shadow transition text-sm"
                   >
                     Browse Properties
@@ -162,7 +162,7 @@ const Dashboard = () => {
                 </div>
                 <div className="mt-6 flex justify-center">
                   <Link
-                    to="/properties?filter=rent"
+                    to="/properties?type=rent"
                     className="inline-flex items-center justify-center px-4 py-2 rounded-full border-2 border-[#5a3e2b] text-[#5a3e2b] bg-white/90 shadow-sm hover:shadow transition text-sm"
                   >
                     Find Rentals

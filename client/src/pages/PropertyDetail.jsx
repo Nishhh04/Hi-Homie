@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
 const FALLBACK_IMAGE = "https://via.placeholder.com/800x500?text=No+Image+Available";
 
@@ -133,61 +133,100 @@ const PropertyDetail = () => {
     }
   };
 
+  const handlePrevImage = () => {
+    if (!property.images || property.images.length <= 1) return;
+    setActiveImg((prev) => (prev === 0 ? property.images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    if (!property.images || property.images.length <= 1) return;
+    setActiveImg((prev) => (prev === property.images.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition"
+      >
+        <ArrowLeft size={20} />
+        <span>Back</span>
+      </button>
+
       <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
 
       {/* Image Slider */}
-      <div className="mb-6">
+      <div className="relative mb-6 w-full h-[500px] bg-neutral-950 rounded-lg overflow-hidden flex items-center justify-center">
         <img
           src={property.images?.length > 0 ? property.images[activeImg] : FALLBACK_IMAGE}
           alt="property"
-          className="w-full h-96 object-cover rounded-lg"
+          className="max-w-full max-h-full object-contain"
         />
-        {(property.images?.length > 0 || isOwner) && (
-          <div className="flex items-center gap-3 mt-4 overflow-x-auto py-1">
-            {property.images?.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`thumb-${idx}`}
-                onClick={() => setActiveImg(idx)}
-                className={`w-24 h-20 object-cover rounded cursor-pointer border-2 ${
-                  activeImg === idx ? "border-brown" : "border-transparent"
-                }`}
-              />
-            ))}
 
-            {/* "+" upload button for owner */}
-            {isOwner && (property.images?.length || 0) < 5 && (
-              <div className="shrink-0">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  style={{ display: "none" }}
-                />
-                <button
-                  type="button"
-                  disabled={uploadingImage}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-20 bg-gray-100 hover:bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center cursor-pointer transition text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {uploadingImage ? (
-                    <Loader2 className="animate-spin text-brown" size={24} />
-                  ) : (
-                    <>
-                      <Plus size={24} className="text-gray-600" />
-                      <span className="text-xs font-semibold mt-1">Add Image</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
+        {/* Navigation Arrows */}
+        {property.images?.length > 1 && (
+          <>
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/45 hover:bg-black/65 flex items-center justify-center text-white transition backdrop-blur-sm shadow-md cursor-pointer"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/45 hover:bg-black/65 flex items-center justify-center text-white transition backdrop-blur-sm shadow-md cursor-pointer"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </>
         )}
       </div>
+
+      {/* Thumbnails */}
+      {(property.images?.length > 0 || isOwner) && (
+        <div className="flex items-center gap-3 mt-4 overflow-x-auto py-1 mb-8">
+          {property.images?.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`thumb-${idx}`}
+              onClick={() => setActiveImg(idx)}
+              className={`w-24 h-20 object-cover rounded cursor-pointer border-2 ${
+                activeImg === idx ? "border-brown" : "border-transparent"
+              }`}
+            />
+          ))}
+
+          {/* "+" upload button for owner */}
+          {isOwner && (property.images?.length || 0) < 5 && (
+            <div className="shrink-0">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
+              <button
+                type="button"
+                disabled={uploadingImage}
+                onClick={() => fileInputRef.current?.click()}
+                className="w-24 h-20 bg-gray-100 hover:bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center cursor-pointer transition text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploadingImage ? (
+                  <Loader2 className="animate-spin text-brown" size={24} />
+                ) : (
+                  <>
+                    <Plus size={24} className="text-gray-600" />
+                    <span className="text-xs font-semibold mt-1">Add Image</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Property Details */}
       <h2 className="text-2xl font-semibold">{property.title || "Untitled Property"}</h2>

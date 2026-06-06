@@ -1,6 +1,6 @@
 // pages/Properties.jsx
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import PropertyCard from "../components/PropertyCard";
 import { AuthContext } from "../context/AuthContext";
@@ -16,9 +16,11 @@ const PRICE_RANGES = [
 const Properties = () => {
   const { token } = useContext(AuthContext);
   const [properties, setProperties] = useState([]);
+  const [searchParams] = useSearchParams();
+  
   const [filters, setFilters] = useState({
     location: "",
-    type: "",
+    type: searchParams.get("type") || "",
     priceRange: "",
   });
   const [underDealFilter, setUnderDealFilter] = useState("");
@@ -67,7 +69,7 @@ const Properties = () => {
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
-        {/* City input */}
+        {/* location input */}
         <input
           type="text"
           placeholder="Enter city (e.g. Delhi, Jaipur)"
