@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { Plus, Loader2 } from "lucide-react";
 
 const FALLBACK_IMAGE = "https://via.placeholder.com/800x500?text=No+Image+Available";
 
@@ -16,6 +17,8 @@ const PropertyDetail = () => {
   const [showEditModal, setShowEditModal] = useState(false); // ✅ modal state
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -94,6 +97,42 @@ const PropertyDetail = () => {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("images", file);
+
+      const res = await axios.put(
+        `https://hi-homie.onrender.com/api/properties/${property._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setProperty(res.data);
+      if (res.data.images && res.data.images.length > 0) {
+        setActiveImg(res.data.images.length - 1);
+      }
+      alert("Image uploaded successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Failed to upload image.");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
@@ -105,9 +144,9 @@ const PropertyDetail = () => {
           alt="property"
           className="w-full h-96 object-cover rounded-lg"
         />
-        {property.images?.length > 0 && (
-          <div className="flex gap-3 mt-4 overflow-x-auto">
-            {property.images.map((img, idx) => (
+        {(property.images?.length > 0 || isOwner) && (
+          <div className="flex items-center gap-3 mt-4 overflow-x-auto py-1">
+            {property.images?.map((img, idx) => (
               <img
                 key={idx}
                 src={img}
@@ -118,6 +157,34 @@ const PropertyDetail = () => {
                 }`}
               />
             ))}
+
+            {/* "+" upload button for owner */}
+            {isOwner && (property.images?.length || 0) < 5 && (
+              <div className="shrink-0">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  disabled={uploadingImage}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-24 h-20 bg-gray-100 hover:bg-gray-200 border-2 border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center cursor-pointer transition text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploadingImage ? (
+                    <Loader2 className="animate-spin text-brown" size={24} />
+                  ) : (
+                    <>
+                      <Plus size={24} className="text-gray-600" />
+                      <span className="text-xs font-semibold mt-1">Add Image</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>

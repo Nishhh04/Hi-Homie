@@ -4,12 +4,14 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import googleLogo from "../image/google-logo.png"; 
 import House from "../image/house1.jpg"; 
+import { Eye, EyeOff } from "lucide-react"; 
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sessionRole, setSessionRole] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { setUser, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   
@@ -50,14 +52,23 @@ const Login = () => {
             <label className="block text-bg font-bold text-gray-800 mb-1 text-left">
             Password
             </label>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 pr-10 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-800"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
           <div className="mb-4 text-right">
             <Link to="/forgot-password" className="text-blue-500 text-sm hover:underline">
