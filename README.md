@@ -153,7 +153,7 @@ CLOUD_API_SECRET=your_cloudinary_api_secret
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
 
-VITE_GOOGLE_CLIENT_ID="your-google-client-id-here"
+VITE_GOOGLE_CLIENT_ID="your-google-client-id"
 ```
 
 > 💡 For `EMAIL_PASS`, use a [Gmail App Password](https://support.google.com/accounts/answer/185833) — not your regular Gmail password.
