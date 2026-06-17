@@ -89,7 +89,7 @@ const UnderDeal = () => {
                       View
                     </button>
 
-                    {/* ✅ Only owner sees this toggle */}
+                    {/* Only owner sees this toggle */}
                     {isOwner && (
                       <button
                         onClick={() => handleToggle(p)}

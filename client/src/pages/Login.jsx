@@ -16,8 +16,13 @@ const Login = () => {
   const navigate = useNavigate();
   
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       const res = await axios.post("https://hi-homie.onrender.com/api/auth/login", { email, password });
       setUser(res.data.user);
@@ -26,6 +31,8 @@ const Login = () => {
       navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -92,9 +99,10 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors mb-4"
+            disabled={isSubmitting}
+            className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            Login
+            {isSubmitting ? "Logging in..." : "Login"}
           </button>
           <div className="text-center mb-2 text-gray-500">or</div>
           <button

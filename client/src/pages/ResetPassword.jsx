@@ -17,6 +17,7 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     if (password !== confirm) return setError("Passwords don't match");
 
     setLoading(true);

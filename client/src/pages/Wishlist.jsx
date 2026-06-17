@@ -27,7 +27,7 @@ const Wishlist = () => {
     };
 
     fetchWishlist();
-  }, [token, wishlist]); // re-fetch when wishlist changes
+  }, [token, wishlist]);
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 

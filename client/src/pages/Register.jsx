@@ -12,8 +12,13 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       await axios.post("https://hi-homie.onrender.com/api/auth/register", {
         name,
@@ -24,6 +29,8 @@ const Register = () => {
       navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -87,9 +94,10 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition"
+            disabled={isSubmitting}
+            className={`w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            Register
+            {isSubmitting ? "Registering..." : "Register"}
           </button>
           <div className="text-center mb-2 text-gray-500">or</div>
             <button

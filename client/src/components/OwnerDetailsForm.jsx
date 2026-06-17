@@ -1,4 +1,4 @@
-const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit }) => {
+const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit, isSubmitting }) => {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,8 +15,9 @@ const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit }) => {
           name="ownerName"
           value={form.ownerName || ""}
           onChange={handleChange}
-          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033]"
+          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033] disabled:opacity-50"
           required
+          disabled={isSubmitting}
         />
       </div>
 
@@ -29,8 +30,9 @@ const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit }) => {
           name="ownerEmail"
           value={form.ownerEmail || ""}
           onChange={handleChange}
-          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033]"
+          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033] disabled:opacity-50"
           required
+          disabled={isSubmitting}
         />
       </div>
 
@@ -42,8 +44,9 @@ const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit }) => {
           name="ownerPhone"
           value={form.ownerPhone || ""}
           onChange={handleChange}
-          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033]"
+          className="flex-1 px-4 py-2 rounded-md bg-gray-100/30 text-black focus:outline-none focus:ring-2 focus:ring-[#5C4033] disabled:opacity-50"
           required
+          disabled={isSubmitting}
         />
       </div>
 
@@ -51,7 +54,10 @@ const OwnerDetailsForm = ({ form, setForm, onBack, onSubmit }) => {
         <button
           type="button"
           onClick={onBack}
-          className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+          disabled={isSubmitting}
+          className={`bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-all duration-200 ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           Back
         </button>

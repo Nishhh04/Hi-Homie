@@ -19,6 +19,7 @@ const EditProperty = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch existing property
   useEffect(() => {
@@ -57,6 +58,9 @@ const EditProperty = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
 
     try {
       await axios.put(
@@ -70,6 +74,8 @@ const EditProperty = () => {
       navigate(`/property/${id}`);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -148,9 +154,12 @@ const EditProperty = () => {
 
         <button
           type="submit"
-          className="bg-brown text-white px-6 py-2 rounded w-full"
+          disabled={isSubmitting}
+          className={`bg-brown text-white px-6 py-2 rounded w-full transition-all duration-200 ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Update Property
+          {isSubmitting ? "Updating..." : "Update Property"}
         </button>
       </form>
     </div>
