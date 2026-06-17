@@ -47,8 +47,11 @@ Sellers can list properties with images, set prices, and mark them as **Under De
 
 ### 🔐 Authentication
 - Secure JWT-based register and login
+- Google OAuth 2.0 single sign-on
 - Auth state persisted in `localStorage` across sessions
 - Protected routes — only logged-in users can list or manage properties
+- Forgot password flow with email-based reset link (Nodemailer)
+- Passwords hashed with bcrypt
 
 ### 🏡 Property Listings
 - Browse all available properties with images, price, and location
@@ -115,7 +118,8 @@ REAL-ESTATE-PROJECT/
 - A [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster (or local MongoDB)
 - A [Cloudinary](https://cloudinary.com/) account for image uploads
 - A Gmail account (or SMTP provider) for Nodemailer
-
+- Google Cloud Console account with OAuth 2.0 credentials
+  
 ---
 
 ### 1️⃣ Clone the repository
@@ -148,6 +152,8 @@ CLOUD_API_SECRET=your_cloudinary_api_secret
 
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
+
+VITE_GOOGLE_CLIENT_ID="your-google-client-id-here"
 ```
 
 > 💡 For `EMAIL_PASS`, use a [Gmail App Password](https://support.google.com/accounts/answer/185833) — not your regular Gmail password.
