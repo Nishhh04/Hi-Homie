@@ -28,6 +28,17 @@ const PropertyDetailsForm = ({ form, setForm, onNext }) => {
     });
   };
 
+  const handleRemoveImage = (indexToRemove) => {
+    if (form.images.length <= 1) {
+      alert("At least one image is required.");
+      return;
+    }
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   return (
     <form>
       {/* Title */}
@@ -185,12 +196,21 @@ const PropertyDetailsForm = ({ form, setForm, onNext }) => {
 
       <div className="grid grid-cols-3 gap-3 mt-3">
         {form.images.map((img, index) => (
-          <img
-            key={index}
-            src={URL.createObjectURL(img)}
-            alt="preview"
-            className="h-24 w-full object-cover rounded"
-          />
+          <div key={index} className="relative group h-24 w-full">
+            <img
+              src={URL.createObjectURL(img)}
+              alt="preview"
+              className="h-full w-full object-cover rounded"
+            />
+            <button
+              type="button"
+              onClick={() => handleRemoveImage(index)}
+              className="absolute -top-1.5 -right-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md cursor-pointer transition-all duration-150"
+              title="Remove Image"
+            >
+              ✕
+            </button>
+          </div>
         ))}
       </div>
 

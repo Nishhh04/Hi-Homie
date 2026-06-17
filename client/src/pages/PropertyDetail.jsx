@@ -133,6 +133,41 @@ const PropertyDetail = () => {
     }
   };
 
+  const handleDeleteImage = async (imageIndex) => {
+    if (property.images.length <= 1) {
+      alert("At least one image is required. Add a new image first before removing this one.");
+      return;
+    }
+
+    if (!window.confirm("Are you sure you want to remove this image?")) return;
+
+    const imgUrl = property.images[imageIndex];
+    try {
+      const res = await axios.put(
+        `https://hi-homie.onrender.com/api/properties/${property._id}`,
+        { removeImages: [imgUrl] },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setProperty(res.data);
+      setActiveImg((prev) => {
+        if (prev >= res.data.images.length) {
+          return Math.max(0, res.data.images.length - 1);
+        }
+        return prev;
+      });
+      alert("Image removed successfully!");
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Failed to remove image.");
+    }
+  };
+
   const handlePrevImage = () => {
     if (!property.images || property.images.length <= 1) return;
     setActiveImg((prev) => (prev === 0 ? property.images.length - 1 : prev - 1));
@@ -188,15 +223,29 @@ const PropertyDetail = () => {
       {(property.images?.length > 0 || isOwner) && (
         <div className="flex items-center gap-3 mt-4 overflow-x-auto py-1 mb-8">
           {property.images?.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`thumb-${idx}`}
-              onClick={() => setActiveImg(idx)}
-              className={`w-24 h-20 object-cover rounded cursor-pointer border-2 ${
-                activeImg === idx ? "border-brown" : "border-transparent"
-              }`}
-            />
+            <div key={idx} className="relative shrink-0">
+              <img
+                src={img}
+                alt={`thumb-${idx}`}
+                onClick={() => setActiveImg(idx)}
+                className={`w-24 h-20 object-cover rounded cursor-pointer border-2 ${
+                  activeImg === idx ? "border-brown" : "border-transparent"
+                }`}
+              />
+              {isOwner && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteImage(idx);
+                  }}
+                  className="absolute -top-1.5 -right-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow-md cursor-pointer transition-all duration-150"
+                  title="Remove Image"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           ))}
 
           {/* "+" upload button for owner */}
