@@ -10,30 +10,50 @@ import { Eye, EyeOff } from "lucide-react";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [sessionRole, setSessionRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { setUser, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
     try {
       const res = await axios.post("https://hi-homie.onrender.com/api/auth/login", { email, password });
       setUser(res.data.user);
       setToken(res.data.token);
-      localStorage.setItem("sessionRole", sessionRole);
       navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
-    } finally {
-      setIsSubmitting(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    if (!window.google) {
+      alert("Google Sign-In is loading, please try again in a moment.");
+      return;
+    }
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "1025585098906-m4m3gjs48iqqj8a46f7p066dhl0r01t5.apps.googleusercontent.com",
+      scope: "email profile",
+      callback: async (tokenResponse) => {
+        if (tokenResponse.error) {
+          alert("Google Sign-in failed");
+          return;
+        }
+        try {
+          const apiBase = import.meta.env.VITE_API_URL || "https://hi-homie.onrender.com";
+          const res = await axios.post(`${apiBase}/api/auth/google-login`, {
+            access_token: tokenResponse.access_token,
+          });
+          setUser(res.data.user);
+          setToken(res.data.token);
+          navigate("/dashboard");
+        } catch (err) {
+          alert(err.response?.data?.message || "Google Login failed");
+        }
+      },
+    });
+    client.requestAccessToken();
   };
 
   return (
@@ -82,31 +102,16 @@ const Login = () => {
               Forgot password?
             </Link>
           </div>
-          <div className="mb-4">
-            <select
-              value={sessionRole}
-              onChange={(e) => setSessionRole(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            >
-            <option value="" disabled>
-            Purpose?
-            </option>
-            <option value="buy">Buy</option>
-            <option value="sell">Sell</option>
-            <option value="rent">Rent</option>
-          </select>
-          </div>
           <button
             type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed`}
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors mb-4"
           >
-            {isSubmitting ? "Logging in..." : "Login"}
+            Login
           </button>
           <div className="text-center mb-2 text-gray-500">or</div>
           <button
             type="button"
+            onClick={handleGoogleLogin}
             className="w-full border border-gray-300 py-2 rounded-md hover:bg-gray-100 flex items-center justify-center"
           >
             <img src={googleLogo} alt="Google" className="w-5 h-5 mr-2" />

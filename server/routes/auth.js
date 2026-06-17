@@ -66,6 +66,62 @@ router.post("/login", async (req, res) => {
   }
 });
 
+/* GOOGLE LOGIN */
+router.post("/google-login", async (req, res) => {
+  try {
+    const { access_token } = req.body;
+    if (!access_token) {
+      return res.status(400).json({ message: "Access token is required" });
+    }
+
+    // Verify access token with Google
+    const googleRes = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
+    if (!googleRes.ok) {
+      return res.status(400).json({ message: "Failed to verify Google access token" });
+    }
+
+    const googleUser = await googleRes.json();
+    const { email, name } = googleUser;
+
+    if (!email) {
+      return res.status(400).json({ message: "Google account does not provide email" });
+    }
+
+    // Find or create user
+    let user = await User.findOne({ email });
+    if (!user) {
+      // Create user with a secure random password
+      const randomPassword = crypto.randomBytes(16).toString("hex");
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+      user = await User.create({
+        name: name || email.split("@")[0],
+        email,
+        password: hashedPassword,
+      });
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
+  } catch (err) {
+    console.error("Google login error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 // FORGOT PASSWORD
 router.post("/forgot-password", async (req, res) => {
   try {
